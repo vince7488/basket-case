@@ -1,0 +1,73 @@
+# Local-only Codex/agent protocol
+AGENTS.md
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Node / Vue / Vite / Pinia / Vuetify
+node_modules/
+web/node_modules/
+web/dist/
+web/.vite/
+web/.vite-inspect/
+web/coverage/
+web/.nyc_output/
+web/npm-debug.log*
+web/yarn-debug.log*
+web/yarn-error.log*
+web/pnpm-debug.log*
+
+# Laravel / PHP dependencies
+vendor/
+api/vendor/
+api/.phpunit.cache/
+api/.pest/
+api/.php-cs-fixer.cache
+api/.phpunit.result.cache
+
+# Laravel local runtime output
+api/storage/*.key
+api/storage/logs/*.log
+api/storage/framework/cache/data/
+api/storage/framework/sessions/
+api/storage/framework/testing/
+api/storage/framework/views/
+api/bootstrap/cache/*.php
+
+# Local SQLite databases
+*.sqlite
+*.sqlite3
+api/database/*.sqlite
+api/database/*.sqlite3
+
+# Build and cache artifacts
+dist/
+build/
+coverage/
+.cache/
+.parcel-cache/
+.turbo/
+.vite/
+
+# Package manager caches and debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# Composer local cache/log noise
+.composer/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
