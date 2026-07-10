@@ -1,0 +1,13 @@
+html {
+  overflow-y: auto;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: #f7f8fa;
+}
+
+#app {
+  min-height: 100vh;
+}
