@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // <script setup> keeps the form's Composition API state local while exposing helpers to the template.
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const emit = defineEmits<{
   add: [name: string, price: number, quantity: number]
@@ -17,8 +17,25 @@ function normalizeQuantity(value: number) {
   return Number.isFinite(value) ? Math.max(1, Math.trunc(value)) : 1
 }
 
+function normalizePrice(value: number | null) {
+  return value !== null && Number.isFinite(value) ? Math.max(0, value) : null
+}
+
+// computed() keeps button state derived from local form input instead of duplicating validity flags.
+const canAddItem = computed(
+  () =>
+    itemName.value.trim().length > 0 &&
+    itemName.value.length <= 160 &&
+    itemPrice.value !== null &&
+    Number.isFinite(itemPrice.value) &&
+    itemPrice.value >= 0 &&
+    Number.isFinite(itemQuantity.value) &&
+    itemQuantity.value >= 1,
+)
+
 function submitItem() {
   error.value = ''
+  itemPrice.value = normalizePrice(itemPrice.value)
   itemQuantity.value = normalizeQuantity(Number(itemQuantity.value))
 
   if (!itemName.value.trim()) {
@@ -71,6 +88,7 @@ defineExpose({
           min="0"
           step="0.01"
           variant="outlined"
+          @blur="itemPrice = normalizePrice(itemPrice)"
         />
       </v-col>
 
@@ -87,7 +105,15 @@ defineExpose({
       </v-col>
 
       <v-col cols="12" md="2">
-        <v-btn class="add-item-form__button" color="primary" type="submit" block>Add</v-btn>
+        <v-btn
+          class="add-item-form__button"
+          color="primary"
+          type="submit"
+          :disabled="!canAddItem"
+          block
+        >
+          Add
+        </v-btn>
       </v-col>
     </v-row>
 

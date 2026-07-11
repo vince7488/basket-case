@@ -21,6 +21,10 @@ function decrease() {
 function increase() {
   quantity.value += 1
 }
+
+function normalizeInput() {
+  quantity.value = Number(quantity.value)
+}
 </script>
 
 <template>
@@ -44,6 +48,7 @@ function increase() {
       density="compact"
       hide-details
       variant="outlined"
+      @blur="normalizeInput"
     />
 
     <v-btn

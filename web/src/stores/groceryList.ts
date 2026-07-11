@@ -37,6 +37,22 @@ export const useGroceryListStore = defineStore('groceryList', () => {
   const isOverBudget = computed(() => total.value > budget.value)
   const remaining = computed(() => Math.max(difference.value, 0))
   const overBudgetBy = computed(() => Math.max(-difference.value, 0))
+  const isValid = computed(
+    () =>
+      name.value.trim().length > 0 &&
+      name.value.length <= 120 &&
+      Number.isFinite(budget.value) &&
+      budget.value >= 0 &&
+      items.value.every(
+        (item) =>
+          item.name.trim().length > 0 &&
+          item.name.length <= 160 &&
+          Number.isFinite(item.price) &&
+          item.price >= 0 &&
+          Number.isInteger(item.quantity) &&
+          item.quantity >= 1,
+      ),
+  )
 
   function toNonNegativeNumber(value: number) {
     return Number.isFinite(value) ? Math.max(0, value) : 0
@@ -103,11 +119,20 @@ export const useGroceryListStore = defineStore('groceryList', () => {
   }
 
   async function saveList() {
+    if (saving.value) {
+      throw new Error('The list is already being saved.')
+    }
+
+    if (!isValid.value) {
+      error.value = 'Fix the list details before saving.'
+      throw new Error(error.value)
+    }
+
     saving.value = true
     error.value = null
 
     const payload = {
-      name: name.value,
+      name: name.value.trim(),
       budget: budget.value,
       items: items.value.map((item) => ({ ...item })),
     }
@@ -172,6 +197,7 @@ export const useGroceryListStore = defineStore('groceryList', () => {
     isOverBudget,
     remaining,
     overBudgetBy,
+    isValid,
     addItem,
     removeItem,
     updateQuantity,

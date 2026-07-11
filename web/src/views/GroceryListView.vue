@@ -30,6 +30,28 @@ const savedListUrl = computed(() => {
 
   return `${window.location.origin}${routeLocation.href}`
 })
+const listNameError = computed(() => {
+  if (!store.name.trim()) {
+    return 'Enter a list name before saving.'
+  }
+
+  if (store.name.length > 120) {
+    return 'List name must be 120 characters or fewer.'
+  }
+
+  return ''
+})
+const listValidationMessage = computed(() => {
+  if (store.isValid) {
+    return ''
+  }
+
+  if (!store.name.trim()) {
+    return 'Enter a list name before saving.'
+  }
+
+  return 'Fix the list details before saving.'
+})
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 function normalizeBudget() {
@@ -50,6 +72,14 @@ async function addItem(name: string, price: number, quantity: number) {
 }
 
 async function save() {
+  if (store.saving) {
+    return
+  }
+
+  if (!store.isValid) {
+    return
+  }
+
   try {
     const wasNewList = !store.id
     const savedList = await store.saveList()
@@ -150,7 +180,7 @@ watch(
 <template>
   <v-container class="py-6 py-sm-8" max-width="960">
     <v-row justify="center">
-      <v-col cols="12" md="10" lg="8">
+      <v-col cols="12" md="10">
         <v-card class="pa-4 pa-sm-6" rounded="lg">
           <v-card-title class="text-h4 px-0 pb-2">Basket Case</v-card-title>
           <v-card-subtitle class="px-0 pb-6">Grocery budget planner</v-card-subtitle>
@@ -184,6 +214,7 @@ watch(
                     v-model="store.name"
                     label="List name"
                     maxlength="120"
+                    :error-messages="listNameError"
                     variant="outlined"
                   />
                 </v-col>
@@ -203,6 +234,14 @@ watch(
               </v-row>
             </div>
 
+            <v-alert
+              v-if="listValidationMessage"
+              class="grocery-list-view__section"
+              type="warning"
+              variant="tonal"
+            >
+              {{ listValidationMessage }}
+            </v-alert>
 
             <BudgetSummary
               class="grocery-list-view__section"
@@ -247,7 +286,7 @@ watch(
               <v-btn
                 color="primary"
                 :loading="store.saving"
-                :disabled="store.saving"
+                :disabled="store.saving || !store.isValid"
                 @click="save"
               >
                 {{ store.id ? 'Save changes' : 'Save list' }}
@@ -258,7 +297,7 @@ watch(
               <div class="grocery-list-view__share">
                 <div>
                   <strong>Anyone with this link can open and edit this list.</strong>
-                  <div class="text-body-2">{{ savedListUrl }}</div>
+                  <div class="grocery-list-view__share-url text-body-2">{{ savedListUrl }}</div>
                 </div>
                 <v-btn color="primary" variant="tonal" @click="copySavedListUrl">Copy link</v-btn>
               </div>
@@ -305,6 +344,9 @@ watch(
   flex-wrap: wrap;
 }
 
+.grocery-list-view__share-url {
+  overflow-wrap: anywhere;
+}
 
 @media (max-width: 600px) {
   .grocery-list-view__load-error,

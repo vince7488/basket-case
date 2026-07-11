@@ -34,7 +34,7 @@ function formatCurrency(value: number) {
 <template>
   <v-card class="grocery-item-row" variant="outlined">
     <div class="grocery-item-row__details">
-      <div>
+      <div class="grocery-item-row__name">
         <div class="text-subtitle-1 font-weight-medium">{{ props.item.name }}</div>
         <div class="text-body-2 text-medium-emphasis">
           {{ formatCurrency(props.item.price) }} each
@@ -71,6 +71,11 @@ function formatCurrency(value: number) {
   display: grid;
   gap: 16px;
   grid-template-columns: minmax(0, 1fr) auto minmax(104px, auto) 40px;
+}
+
+.grocery-item-row__name {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .grocery-item-row__total {
