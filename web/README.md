@@ -1,6 +1,6 @@
-# web
+# Basket Case frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+The Basket Case frontend uses Vue 3, TypeScript, Vite, Pinia, Vue Router, and Vuetify. Yarn is the required package manager.
 
 ## Recommended IDE Setup
 

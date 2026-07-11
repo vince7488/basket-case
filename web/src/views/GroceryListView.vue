@@ -17,7 +17,7 @@ const { name } = storeToRefs(groceryList)
         <v-card class="pa-6" rounded="lg">
           <v-card-title class="text-h4 px-0">Basket Case</v-card-title>
           <v-card-subtitle class="px-0 pb-6">
-            Phase 0 foundation: Vue, Router, Pinia, Vuetify, and Laravel API configuration.
+            Welcome to Basket Case!
           </v-card-subtitle>
 
           <!-- v-model keeps the input value synchronized with the Pinia ref returned by storeToRefs(). -->
