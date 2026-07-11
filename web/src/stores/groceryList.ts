@@ -1,6 +1,7 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 
+import { createList, getList, updateList } from '@/api/listsApi'
 import type { GroceryItem, GroceryList } from '@/types/grocery'
 
 // defineStore() names the Pinia store that owns grocery-list business state outside components.
@@ -77,6 +78,48 @@ export const useGroceryListStore = defineStore('groceryList', () => {
     }))
   }
 
+  async function saveList() {
+    saving.value = true
+    error.value = null
+
+    const payload = {
+      name: name.value,
+      budget: budget.value,
+      items: items.value,
+    }
+
+    try {
+      // The store chooses POST for unsaved lists and PUT once Laravel has assigned a UUID.
+      const savedList = id.value ? await updateList(id.value, payload) : await createList(payload)
+
+      setList(savedList)
+
+      return savedList
+    } catch (exception) {
+      // Failed saves report the problem but intentionally leave the current editable list untouched.
+      error.value = exception instanceof Error ? exception.message : 'The list could not be saved.'
+
+      throw exception
+    } finally {
+      saving.value = false
+    }
+  }
+
+  async function loadList(uuid: string) {
+    loading.value = true
+    error.value = null
+
+    try {
+      // GET replaces state only after Laravel returns a valid saved list.
+      const savedList = await getList(uuid)
+      setList(savedList)
+    } catch (exception) {
+      error.value = exception instanceof Error ? exception.message : 'The list could not be loaded.'
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     id,
     name,
@@ -94,5 +137,7 @@ export const useGroceryListStore = defineStore('groceryList', () => {
     removeItem,
     updateQuantity,
     setList,
+    saveList,
+    loadList,
   }
 })

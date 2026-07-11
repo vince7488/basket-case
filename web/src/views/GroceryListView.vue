@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // <script setup> runs once per component instance and exposes these bindings directly to the template.
 import { nextTick, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 import AddItemForm from '@/components/AddItemForm.vue'
 import BudgetSummary from '@/components/BudgetSummary.vue'
@@ -8,6 +9,8 @@ import GroceryItemRow from '@/components/GroceryItemRow.vue'
 import { useGroceryListStore } from '@/stores/groceryList'
 
 const store = useGroceryListStore()
+const route = useRoute()
+const router = useRouter()
 const addItemForm = ref<InstanceType<typeof AddItemForm> | null>(null)
 const budgetPulse = ref(false)
 
@@ -21,6 +24,25 @@ async function addItem(name: string, price: number, quantity: number) {
   // nextTick() waits for Vue to finish the form reset before returning focus to the name input.
   await nextTick()
   addItemForm.value?.focusNameInput()
+}
+
+async function save() {
+  try {
+    const wasNewList = !store.id
+    const savedList = await store.saveList()
+
+    if (wasNewList && route.name === 'new-list' && savedList.id) {
+      // Vue Router replace updates the URL after first save without leaving the unsaved route in history.
+      await router.replace({
+        name: 'saved-list',
+        params: {
+          uuid: savedList.id,
+        },
+      })
+    }
+  } catch {
+    // The Pinia action sets store.error; the view only avoids an unhandled rejected click handler.
+  }
 }
 
 // watch() is used for this local side effect: briefly pulse only when the total crosses the budget.
@@ -49,6 +71,17 @@ watch(
         <v-card class="pa-4 pa-sm-6" rounded="lg">
           <v-card-title class="text-h4 px-0 pb-2">Basket Case</v-card-title>
           <v-card-subtitle class="px-0 pb-6">Grocery budget planner</v-card-subtitle>
+
+          <v-alert
+            v-if="store.error"
+            class="mb-4"
+            type="error"
+            variant="tonal"
+            closable
+            @click:close="store.error = null"
+          >
+            {{ store.error }}
+          </v-alert>
 
           <div class="grocery-list-view__section">
             <v-row dense>
@@ -113,6 +146,14 @@ watch(
               />
             </div>
           </section>
+
+          <v-divider class="my-6" />
+
+          <div class="grocery-list-view__actions">
+            <v-btn color="primary" :loading="store.saving" :disabled="store.saving" @click="save">
+              {{ store.id ? 'Save changes' : 'Save list' }}
+            </v-btn>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -131,5 +172,10 @@ watch(
 .grocery-list-view__items {
   display: grid;
   gap: 12px;
+}
+
+.grocery-list-view__actions {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
