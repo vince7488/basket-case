@@ -6,15 +6,19 @@ import type { GroceryItem, GroceryList } from '@/types/grocery'
 
 // defineStore() names the Pinia store that owns grocery-list business state outside components.
 export const useGroceryListStore = defineStore('groceryList', () => {
+  const defaultListName = 'My grocery list'
+  const defaultBudget = 100
+
   // ref() creates reactive state values that templates and computed values update from automatically.
   const id = ref<string | null>(null)
-  const name = ref('My grocery list')
-  const budgetAmount = ref(100)
+  const name = ref(defaultListName)
+  const budgetAmount = ref(defaultBudget)
   const items = ref<GroceryItem[]>([])
 
   const loading = ref(false)
   const saving = ref(false)
   const error = ref<string | null>(null)
+  let activeLoadRequest = 0
 
   // Writable computed refs can validate assignments while still working naturally with v-model later.
   const budget = computed({
@@ -67,7 +71,7 @@ export const useGroceryListStore = defineStore('groceryList', () => {
   }
 
   function setList(data: GroceryList) {
-    // API data replaces the editable list when a saved list is loaded in later phases.
+    // API data replaces the editable list only after a saved list has loaded successfully.
     id.value = data.id
     name.value = data.name
     budget.value = Number(data.budget)
@@ -78,6 +82,26 @@ export const useGroceryListStore = defineStore('groceryList', () => {
     }))
   }
 
+  function resetListState() {
+    id.value = null
+    name.value = defaultListName
+    budget.value = defaultBudget
+    items.value = []
+    error.value = null
+  }
+
+  function resetList() {
+    activeLoadRequest += 1
+    resetListState()
+    loading.value = false
+  }
+
+  function prepareForRouteLoad() {
+    // Saved-route loads clear editable state first so stale data is not shown for another UUID.
+    resetListState()
+    loading.value = true
+  }
+
   async function saveList() {
     saving.value = true
     error.value = null
@@ -85,7 +109,7 @@ export const useGroceryListStore = defineStore('groceryList', () => {
     const payload = {
       name: name.value,
       budget: budget.value,
-      items: items.value,
+      items: items.value.map((item) => ({ ...item })),
     }
 
     try {
@@ -106,17 +130,32 @@ export const useGroceryListStore = defineStore('groceryList', () => {
   }
 
   async function loadList(uuid: string) {
-    loading.value = true
+    const loadRequest = activeLoadRequest + 1
+    activeLoadRequest = loadRequest
+    prepareForRouteLoad()
     error.value = null
 
     try {
       // GET replaces state only after Laravel returns a valid saved list.
       const savedList = await getList(uuid)
+
+      if (loadRequest !== activeLoadRequest) {
+        return
+      }
+
       setList(savedList)
     } catch (exception) {
+      if (loadRequest !== activeLoadRequest) {
+        return
+      }
+
       error.value = exception instanceof Error ? exception.message : 'The list could not be loaded.'
+
+      throw exception
     } finally {
-      loading.value = false
+      if (loadRequest === activeLoadRequest) {
+        loading.value = false
+      }
     }
   }
 
@@ -137,6 +176,7 @@ export const useGroceryListStore = defineStore('groceryList', () => {
     removeItem,
     updateQuantity,
     setList,
+    resetList,
     saveList,
     loadList,
   }
