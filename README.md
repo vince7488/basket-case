@@ -13,6 +13,7 @@ collaboration, dashboards, analytics, Docker, and CI/CD.
 ## Technology
 
 - Frontend: Vue 3, TypeScript, Vite, Pinia, Vue Router, Vuetify
+- Frontend package manager: Yarn 3 (managed through Corepack)
 - Backend: Laravel JSON API
 - Development database: SQLite
 - Persistence model: one `grocery_lists` record containing the complete item array as JSON
@@ -73,9 +74,12 @@ php artisan serve
 
 ```sh
 cd web
-npm install
-npm run dev
+corepack enable
+yarn install
+yarn dev
 ```
+
+The frontend pins its Yarn version in `web/package.json`. Run frontend dependency and script commands with Yarn from the `web` directory.
 
 The frontend runs at:
 

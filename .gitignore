@@ -10,6 +10,7 @@ AGENTS.md
 # Node / Vue / Vite / Pinia / Vuetify
 node_modules/
 web/node_modules/
+web/.yarn/
 web/dist/
 web/.vite/
 web/.vite-inspect/
