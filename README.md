@@ -7,9 +7,6 @@ running totals, save the list, reopen it through a UUID URL, and share the URL w
 
 VERSION: **v0.0.1**.
 
-The MVP intentionally excludes accounts, authentication, categories, notes, drag-and-drop, autosave, offline support, real-time
-collaboration, dashboards, analytics, Docker, and CI/CD.
-
 ## Technology
 
 - Frontend: Vue 3, TypeScript, Vite, Pinia, Vue Router, Vuetify
@@ -24,9 +21,10 @@ The project foundation is in place:
 
 - Laravel is configured as a JSON API backend with SQLite for local development.
 - Vue is configured with Vite, TypeScript, Pinia, Vue Router, and Vuetify.
-- The frontend reads its API base URL from `VITE_API_BASE_URL`, defaulting to `http://localhost:8000/api`.
 - Phase 0 includes a Laravel health endpoint at `http://localhost:8000/api/health`.
-- Grocery-list persistence work starts in Phase 1.
+
+The MVP intentionally excludes accounts, authentication, categories, notes, drag-and-drop, autosave, offline support, real-time
+collaboration, dashboards, analytics, Docker, and CI/CD.
 
 ## Project structure
 
@@ -40,7 +38,21 @@ basket-case/
 
 ## Run locally
 
-Use Laravel Herd as the local API runner, and use one terminal for the Vue dev server.
+Run the backend locally by executing:
+
+```powershell
+php artisan serve
+```
+
+You need to be in the `/api` (Laravel build) folder.
+
+Then run the frontend locally by executing:
+
+```powershell
+yarn dev
+```
+
+You need to be in the `/web` (Laravel build) folder.
 
 ### Backend
 
@@ -52,7 +64,7 @@ php artisan key:generate
 php artisan migrate
 ```
 
-Then open the `api` directory with Herd and make sure the site is running. The API should be available at:
+You can open the `api` directory and make sure the site is running. The API should be available at:
 
 ```text
 http://localhost:8000
@@ -62,12 +74,6 @@ Health check:
 
 ```text
 http://localhost:8000/api/health
-```
-
-If Herd is not available, use this fallback from the `api` directory:
-
-```powershell
-php artisan serve
 ```
 
 ### Frontend
