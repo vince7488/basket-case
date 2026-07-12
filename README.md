@@ -1,19 +1,30 @@
 # Basket Case
 
-Basket Case is a single-screen grocery budgeting web application. A user can name a shopping list, set a budget, add grocery items, see running totals, save the list, reopen it through a UUID URL, and share the URL with another person.
+Basket Case is a single-screen grocery budgeting web application. A user can name a shopping list, set a budget, add grocery items, see
+running totals, save the list, reopen it through a UUID URL, and share the URL with another person.
 
 ## MVP release
 
-The first release is **v0.0.1**.
-
-The MVP intentionally excludes accounts, authentication, categories, notes, drag-and-drop, autosave, offline support, real-time collaboration, dashboards, analytics, Docker, and CI/CD.
+VERSION: **v0.0.1**.
 
 ## Technology
 
 - Frontend: Vue 3, TypeScript, Vite, Pinia, Vue Router, Vuetify
+- Frontend package manager: Yarn 3 (managed through Corepack)
 - Backend: Laravel JSON API
 - Development database: SQLite
 - Persistence model: one `grocery_lists` record containing the complete item array as JSON
+
+## Current status
+
+The project foundation is in place:
+
+- Laravel is configured as a JSON API backend with SQLite for local development.
+- Vue is configured with Vite, TypeScript, Pinia, Vue Router, and Vuetify.
+- Phase 0 includes a Laravel health endpoint at `http://localhost:8000/api/health`.
+
+The MVP intentionally excludes accounts, authentication, categories, notes, drag-and-drop, autosave, offline support, real-time
+collaboration, dashboards, analytics, Docker, and CI/CD.
 
 ## Project structure
 
@@ -22,48 +33,68 @@ basket-case/
 ├── api/          Laravel application
 ├── web/          Vue application
 ├── docs/         Product and delivery specifications
-├── AGENTS.md     Instructions for ChatGPT and coding agents
 └── README.md
 ```
 
-## Delivery hierarchy
+## Run locally
 
-The GitHub delivery model is:
+Run the backend locally by executing:
 
-```text
-Release epic
-└── Phase issue
-    ├── User story
-    ├── Technical task checklist
-    └── Acceptance criteria
+```powershell
+php artisan serve
 ```
 
-For v0.0.1, each phase is represented by one tracking issue. User stories and implementation tasks live inside the phase issue so the MVP remains easy to navigate and execute.
+You need to be in the `/api` (Laravel build) folder.
 
-## Documentation
+Then run the frontend locally by executing:
 
-- [`docs/PROJECT_SPEC.md`](docs/PROJECT_SPEC.md) – product scope, architecture, requirements, phases, stories, acceptance criteria, and definition of done
-- [`docs/DELIVERY_WORKFLOW.md`](docs/DELIVERY_WORKFLOW.md) – branch, issue, commit, pull request, and ChatGPT execution workflow
-- [`AGENTS.md`](AGENTS.md) – repository-level implementation constraints for ChatGPT and coding agents
-
-## Starting development
-
-Work from the current open phase issue. Create one branch per phase or user story, implement only the listed scope, verify the acceptance criteria, and open a pull request referencing the issue.
-
-Recommended branch format:
-
-```text
-phase/0-project-foundation
-story/add-grocery-item
-fix/save-error-state
+```powershell
+yarn dev
 ```
 
-Recommended pull request reference:
+You need to be in the `/web` (Laravel build) folder.
 
-```text
-Closes #<issue-number>
+### Backend
+
+```powershell
+cd api
+composer install
+Copy-Item .env.example .env
+php artisan key:generate
+php artisan migrate
 ```
 
-## Release definition
+You can open the `api` directory and make sure the site is running. The API should be available at:
 
-Basket Case v0.0.1 is complete when the entire flow works from creating a list through saving, reloading, editing, and sharing it, while preserving the visible list when API requests fail.
+```text
+http://localhost:8000
+```
+
+Health check:
+
+```text
+http://localhost:8000/api/health
+```
+
+### Frontend
+
+```sh
+cd web
+corepack enable
+yarn install
+yarn dev
+```
+
+The frontend pins its Yarn version in `web/package.json`. Run frontend dependency and script commands with Yarn from the `web` directory.
+
+The frontend runs at:
+
+```text
+http://localhost:5173
+```
+
+Optional frontend environment file:
+
+```text
+VITE_API_BASE_URL=http://localhost:8000/api
+```

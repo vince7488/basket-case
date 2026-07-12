@@ -1,6 +1,6 @@
-# web
+# Basket Case frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+The Basket Case frontend uses Vue 3, TypeScript, Vite, Pinia, Vue Router, and Vuetify. Yarn is the required package manager.
 
 ## Recommended IDE Setup
 
@@ -26,23 +26,26 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 ## Project Setup
 
 ```sh
-npm install
+corepack enable
+yarn install
 ```
+
+Corepack reads the `packageManager` field in `package.json` and uses the repository's pinned Yarn version.
 
 ### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
+yarn dev
 ```
 
 ### Type-Check, Compile and Minify for Production
 
 ```sh
-npm run build
+yarn build
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
-npm run lint
+yarn lint
 ```

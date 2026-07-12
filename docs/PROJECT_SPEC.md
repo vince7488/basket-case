@@ -502,6 +502,7 @@ The application must not call a list private, protected, or secure.
 - Laravel generates list UUIDs.
 - Budget and item casts are configured.
 - No relational item table is introduced.
+- Until the full UI phase replaces it, the frontend visibly renders `Welcome to Basket Case!` when running `yarn dev`.
 
 ### Phase 2: Build core Vue state
 

@@ -4,3 +4,10 @@ export interface GroceryItem {
   price: number
   quantity: number
 }
+
+export interface GroceryList {
+  id: string | null
+  name: string
+  budget: number
+  items: GroceryItem[]
+}
