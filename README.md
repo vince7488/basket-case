@@ -45,8 +45,19 @@ Keep `web/.env` on `127.0.0.1:8000` for the standard local workflow. Older `.tes
 
 ## First-Time Setup
 
-Install and prepare the backend:
+### 1. Backend Setup
 
+**macOS & Linux (Bash / Zsh):**
+```bash
+cd api
+composer install
+cp .env.example .env
+php artisan key:generate
+touch database/database.sqlite
+php artisan migrate
+```
+
+**Windows (PowerShell):**
 ```powershell
 cd api
 composer install
@@ -58,8 +69,16 @@ php artisan migrate
 
 Laravel's SQLite connection defaults to `api/database/database.sqlite` when `DB_CONNECTION=sqlite`.
 
-Install frontend dependencies:
+### 2. Frontend Setup
 
+**macOS & Linux (Bash / Zsh):**
+```bash
+cd ../web
+corepack enable
+yarn install
+```
+
+**Windows (PowerShell):**
 ```powershell
 cd ..\web
 corepack enable
@@ -70,13 +89,13 @@ yarn install
 
 Start the Laravel API from the `api` directory:
 
-```powershell
+```bash
 php artisan serve --host=127.0.0.1 --port=8000
 ```
 
 In a second terminal, start the Vue app from the `web` directory:
 
-```powershell
+```bash
 yarn dev
 ```
 
@@ -84,8 +103,17 @@ Open `http://localhost:5173`.
 
 ## Useful Commands
 
-Backend commands, run from `api/`:
+### Backend commands, run from `api/`:
 
+**macOS & Linux (Bash / Zsh):**
+```bash
+php artisan migrate
+php artisan test
+composer test
+./vendor/bin/pint
+```
+
+**Windows (PowerShell):**
 ```powershell
 php artisan migrate
 php artisan test
@@ -93,9 +121,11 @@ composer test
 vendor\bin\pint
 ```
 
-Frontend commands, run from `web/`:
+### Frontend commands, run from `web/`:
 
-```powershell
+*(Works identically across macOS, Linux, and Windows)*
+
+```bash
 yarn dev
 yarn build
 yarn type-check

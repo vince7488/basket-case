@@ -22,6 +22,16 @@ Health:  http://127.0.0.1:8000/api/health
 
 Run these commands from `api/`:
 
+**macOS & Linux (Bash / Zsh):**
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+touch database/database.sqlite
+php artisan migrate
+```
+
+**Windows (PowerShell):**
 ```powershell
 composer install
 Copy-Item .env.example .env
@@ -40,7 +50,7 @@ No MySQL or PostgreSQL service is required for the MVP. Laravel defaults to `dat
 
 ## Run
 
-```powershell
+```bash
 php artisan serve --host=127.0.0.1 --port=8000
 ```
 
@@ -91,6 +101,16 @@ Each item in `items` must include:
 
 ## Useful Commands
 
+**macOS & Linux (Bash / Zsh):**
+```bash
+php artisan migrate
+php artisan route:list --path=api
+php artisan test
+composer test
+./vendor/bin/pint
+```
+
+**Windows (PowerShell):**
 ```powershell
 php artisan migrate
 php artisan route:list --path=api
