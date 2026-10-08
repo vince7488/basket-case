@@ -124,7 +124,7 @@ We’re not just building a shopping list; we’re engineering a zero-latency sh
 * **The Mission:** Instant utility with zero signup walls, but enterprise-grade security when you're ready.
 * **The Tech:** 
   * **Default Track Mode (Local Ghost):** Instant anonymous utility. State lives entirely in local SQLite / IndexedDB. Zero sign-in, zero friction, zero tracking.
-  * **Ludicrous Upgrade (OAuth 2.0 & Passkeys):** One tap links your anonymous session into a cloud-synced account via Apple, Google, or GitHub. Seamless state hydration—your local list instantly promotes to a persistent multi-device profile with zero data loss.
+  * **Ludicrous Upgrade (OAuth 2.0 & Passkeys):** One tap links your anonymous session into a cloud-synced account via Apple, Google, or GitHub. Seamless state hydration: your local list instantly promotes to a persistent multi-device profile with zero data loss.
 
 The product Alpha scope is defined in [docs/PROJECT_SPEC.md](docs/PROJECT_SPEC.md). Anything outside that file is intentionally deferred for later releases.
 
