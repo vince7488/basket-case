@@ -17,9 +17,9 @@ The app is one grocery-list surface. Users can edit a list name and budget, add 
 
 ## Setup
 
-Run these commands from `web/`:
+Run these commands from `web/` (Works identically across macOS, Linux, and Windows):
 
-```powershell
+```bash
 corepack enable
 yarn install
 ```
