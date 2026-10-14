@@ -67,9 +67,15 @@ yarn lint
 yarn test:unit
 yarn coverage
 yarn format
+yarn storybook
+yarn build-storybook
+yarn chromatic
 ```
 
 `yarn build` runs `vue-tsc --build` and then `vite build`.
+`yarn storybook` starts local Storybook development on port 6006.
+`yarn build-storybook` generates a static Storybook build in `storybook-static/`.
+`yarn chromatic` runs visual regression testing on Chromatic (requires `CHROMATIC_PROJECT_TOKEN`).
 
 ## Source Layout
 

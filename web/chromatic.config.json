@@ -1,0 +1,8 @@
+{
+  "$schema": "https://www.chromatic.com/config.json",
+  "buildScriptName": "build-storybook",
+  "onlyChanged": true,
+  "projectId": "Project:6aceb42a512aef117d770368",
+  "storybookBaseDir": "web",
+  "zip": true
+}
